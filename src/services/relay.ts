@@ -7,10 +7,19 @@ async function generateRelay(
     subscriptionCondition?: SubscriptionParams,
     timestamp?: number
 ) {
-    if (!subscriptionCondition)
-        console.warn('No subscription condition provided');
+    let relay;
+    try {
+        relay = await Relay.connect(relayUrl);
+    } catch (error) {
+        console.error('Error connecting to relay:', error);
 
-    const relay = await Relay.connect(relayUrl);
+        // Retry connection after a delay
+        setTimeout(
+            () => generateRelay(relayUrl, subscriptionCondition, timestamp),
+            2000
+        );
+        return;
+    }
 
     const stringTimeToConnection = timestamp
         ? `\n| in: ${Date.now() - timestamp}ms`
