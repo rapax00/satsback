@@ -1,10 +1,13 @@
-import 'websocket-polyfill';
 import * as dotenv from 'dotenv';
 import { Filter } from 'nostr-tools';
 import { sendSatsback } from './services/sendSatsback';
 import { generateRelay } from './services/relay';
 import { SubscriptionParams } from './types/relay';
 import { prisma } from './utils/prismaClient';
+import WebSocket from 'ws';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(global as any).WebSocket = WebSocket;
 
 dotenv.config();
 

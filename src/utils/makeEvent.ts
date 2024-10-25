@@ -45,6 +45,7 @@ async function makeEvent(
         let satsbackAmount: number;
         let satsbackMemo: string = 'Satsback por pagar con LaCard.';
 
+        /// VOLUNTEER ///
         const volunteer: Volunteer | null = await prisma.volunteer.findUnique({
             where: {
                 publicKey: userPubkey,
@@ -87,7 +88,9 @@ async function makeEvent(
                     voucherMilisats: newVoucherMilisats,
                 },
             });
-        } else {
+        }
+        /// DEFAULT ///
+        else {
             const satsbackRate: number = parseFloat(
                 process.env.SATSBACK_DEFAULT!
             );
@@ -107,7 +110,8 @@ async function makeEvent(
         const senderPubkeyInfo = await fetch(
             'https://lawallet.ar/api/pubkey/' + getPublicKey(privateKey)
         );
-        const senderJson = await senderPubkeyInfo.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const senderJson: any = await senderPubkeyInfo.json();
         const senderWalias =
             senderJson.username + '@' + senderJson.federationId;
 
@@ -115,7 +119,8 @@ async function makeEvent(
         const receiverPubkeyInfo = await fetch(
             'https://lawallet.ar/api/pubkey/' + userPubkey
         );
-        const receiverJson = await receiverPubkeyInfo.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const receiverJson: any = await receiverPubkeyInfo.json();
         const receiverWalias =
             receiverJson.username + '@' + receiverJson.federationId;
 
